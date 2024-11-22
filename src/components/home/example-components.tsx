@@ -5,8 +5,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { toast } from 'sonner'
 
 export function ExampleComponents() {
+  const handleButtonClick = (variant: string) => {
+    toast(`Button clicked: ${variant}`, {
+        className: 'bg-primary text-primary-foreground border-secondary',
+    });
+  };
+
   return (
     <div className="grid gap-4">
       <Card>
@@ -14,11 +21,11 @@ export function ExampleComponents() {
           <CardTitle>Button Variants</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-4">
-          <Button variant="default">Default</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="link">Link</Button>
+          <Button variant="default" onClick={() => handleButtonClick('Default')}>Default</Button>
+          <Button variant="secondary" onClick={() => handleButtonClick('Secondary')}>Secondary</Button>
+          <Button variant="outline" onClick={() => handleButtonClick('Outline')}>Outline</Button>
+          <Button variant="ghost" onClick={() => handleButtonClick('Ghost')}>Ghost</Button>
+          <Button variant="link" onClick={() => handleButtonClick('Link')}>Link</Button>
         </CardContent>
       </Card>
       <Card>

@@ -29,7 +29,7 @@ export function ThemeSwitcher() {
   React.useEffect(() => setMounted(true), [])
 
   if (!mounted) {
-    return null
+    return <div suppressHydrationWarning />
   }
 
   const isDarkMode = theme === 'dark' || theme?.endsWith('-dark') || (theme === 'system' && systemTheme === 'dark')
@@ -44,11 +44,11 @@ export function ThemeSwitcher() {
   }
 
   const handleModeChange = (checked: boolean) => {
-    const newMode = checked ? 'dark' : 'light'
-    if (currentTheme === 'light') {
+    const newMode = checked ? 'dark' : ''
+    if (currentTheme === '') {
       setTheme('dark')
     } else if (currentTheme) {
-      setTheme(`${currentTheme}-${newMode}`)
+      setTheme(`${currentTheme}${newMode ? '-dark' : ''}`)
     } else {
       setTheme(newMode)
     }
