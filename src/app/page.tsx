@@ -46,7 +46,7 @@ function HomeContent() {
           </div>
         </div>
       </header>
-      <div className="grid gap-8 mt-24">
+      <div className="grid gap-8 mt-16">
         <Tabs value={tab} onValueChange={setTab} className="w-full">
           <TabsList>
             <TabsTrigger value="chart">Charts</TabsTrigger>
