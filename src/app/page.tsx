@@ -8,6 +8,9 @@ import { ExampleBarChart, ExampleLineChart, ExampleRadialChart } from "@/compone
 import { ExampleForm, LoginForm } from "@/components/home/example-form"
 import { CurrentTheme } from "@/components/home/current-theme"
 import { useQueryState } from 'nuqs'
+import { Button } from "@/components/ui/button" // Assuming you have a Button component
+import Link from "next/link"
+import { GithubIcon } from "lucide-react" // Importing GitHub icon from lucide-react
 
 export default function Home() {
   return (
@@ -28,6 +31,18 @@ function HomeContent() {
           <div className="flex items-center gap-4">
             <CurrentTheme />
             <ThemeSwitcher />
+            <Link
+              href="https://github.com/andrewhicks123/next-themes-colors"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="outline"
+                className="h-10 flex items-center justify-center"
+              >
+                <GithubIcon className="h-5 w-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
