@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ExampleComponents } from "@/components/home/example-components"
 import { ExampleBarChart, ExampleLineChart, ExampleRadialChart } from "@/components/home/example-chart"
 import { ExampleForm, LoginForm } from "@/components/home/example-form"
+import { CurrentTheme } from "@/components/home/current-theme"
 import { useQueryState } from 'nuqs'
 
 export default function Home() {
@@ -21,10 +22,15 @@ function HomeContent() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 bg-background/80 backdrop-blur-sm border-b">
-        <h1 className="text-4xl font-bold">Theme/Color Switcher Demo</h1>
-        <ThemeSwitcher />
-      </div>
+      <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-sm">
+        <div className="container flex h-16 items-center justify-between">
+          <h1 className="text-2xl font-bold px-4">Theme/Color Switcher Demo</h1>
+          <div className="flex items-center gap-4">
+            <CurrentTheme />
+            <ThemeSwitcher />
+          </div>
+        </div>
+      </header>
       <div className="grid gap-8 mt-24">
         <Tabs value={tab} onValueChange={setTab} className="w-full">
           <TabsList>

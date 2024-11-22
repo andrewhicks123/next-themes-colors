@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, RotateCcw } from 'lucide-react'
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
@@ -23,7 +23,7 @@ const colorThemes = [
 ]
 
 export function ThemeSwitcher() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, systemTheme } = useTheme()
 
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
@@ -32,7 +32,7 @@ export function ThemeSwitcher() {
     return null
   }
 
-  const isDarkMode = theme === 'dark' || theme?.endsWith('-dark')
+  const isDarkMode = theme === 'dark' || theme?.endsWith('-dark') || (theme === 'system' && systemTheme === 'dark')
   const currentTheme = theme?.includes('-') ? theme.split('-')[0] : theme === 'dark' ? '' : theme || ''
 
   const handleThemeChange = (color: string) => {
@@ -44,10 +44,13 @@ export function ThemeSwitcher() {
   }
 
   const handleModeChange = (checked: boolean) => {
-    if (!currentTheme) {
-      setTheme(checked ? 'dark' : 'light')
+    const newMode = checked ? 'dark' : 'light'
+    if (currentTheme === 'light') {
+      setTheme('dark')
+    } else if (currentTheme) {
+      setTheme(`${currentTheme}-${newMode}`)
     } else {
-      setTheme(`${currentTheme}${checked ? '-dark' : ''}`)
+      setTheme(newMode)
     }
   }
 
@@ -63,7 +66,18 @@ export function ThemeSwitcher() {
       <DropdownMenuContent align="end" className="w-[280px]">
         <div className="p-4 space-y-4">
           <div className="space-y-2">
-            <h3 className="font-semibold">Color Theme</h3>
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold">Color Theme</h3>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="h-8 px-2"
+                onClick={() => setTheme('system')}
+              >
+                <RotateCcw className="h-4 w-4 mr-1" />
+                
+              </Button>
+            </div>
             <div className="grid grid-cols-3 gap-2">
               {colorThemes.map((t) => (
                 <Button
