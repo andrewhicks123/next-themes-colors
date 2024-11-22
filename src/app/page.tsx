@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { ThemeSwitcher } from "@/components/theme/theme-switcher"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ExampleComponents } from "@/components/home/example-components"
@@ -8,6 +9,14 @@ import { ExampleForm, LoginForm } from "@/components/home/example-form"
 import { useQueryState } from 'nuqs'
 
 export default function Home() {
+  return (
+    <Suspense>
+      <HomeContent />
+    </Suspense>
+  )
+}
+
+function HomeContent() {
   const [tab, setTab] = useQueryState("tab", { defaultValue: "chart" })
 
   return (
