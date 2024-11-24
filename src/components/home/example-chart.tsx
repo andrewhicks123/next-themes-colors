@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, Line, LineChart, RadialBarChart, RadialBar, CartesianGrid, XAxis, YAxis, Legend } from "recharts"
+import { Bar, BarChart, Line, LineChart, RadialBarChart, RadialBar, CartesianGrid, XAxis, YAxis, Legend, ResponsiveContainer } from "recharts"
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
@@ -69,17 +69,19 @@ export function ExampleBarChart() {
       </CardHeader>
       <CardContent>
         <div className="h-[400px]">
-          <ChartContainer config={barChartConfig} className="w-full h-full">
-            <BarChart accessibilityLayer data={barData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Legend />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Bar dataKey="Revenue" fill="var(--chart-1)" radius={4} />
-              <Bar dataKey="Profit" fill="var(--chart-2)" radius={4} />
-            </BarChart>
-          </ChartContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <ChartContainer config={barChartConfig} className="w-full h-full">
+              <BarChart accessibilityLayer data={barData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <Legend />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Bar dataKey="Revenue" fill="var(--chart-1)" radius={4} />
+                <Bar dataKey="Profit" fill="var(--chart-2)" radius={4} />
+              </BarChart>
+            </ChartContainer>
+          </ResponsiveContainer>
         </div>
       </CardContent>
     </Card>
@@ -95,17 +97,19 @@ export function ExampleLineChart() {
       </CardHeader>
       <CardContent>
         <div className="h-[400px]">
-          <ChartContainer config={lineChartConfig} className="w-full h-full">
-            <LineChart accessibilityLayer data={lineData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Legend />
-              <Line type="monotone" dataKey="Users" stroke="var(--chart-3)" />
-              <Line type="monotone" dataKey="Sessions" stroke="var(--chart-4)" />
-            </LineChart>
-          </ChartContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <ChartContainer config={lineChartConfig} className="w-full h-full">
+              <LineChart accessibilityLayer data={lineData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Legend />
+                <Line type="monotone" dataKey="Users" stroke="var(--chart-3)" />
+                <Line type="monotone" dataKey="Sessions" stroke="var(--chart-4)" />
+              </LineChart>
+            </ChartContainer>
+          </ResponsiveContainer>
         </div>
       </CardContent>
     </Card>
@@ -121,23 +125,25 @@ export function ExampleRadialChart() {
       </CardHeader>
       <CardContent>
         <div className="h-[400px]">
-          <ChartContainer config={radialChartConfig} className="w-full h-full">
-            <RadialBarChart 
-              innerRadius="10%" 
-              outerRadius="80%" 
-              data={radialData} 
-              startAngle={180} 
-              endAngle={0}
-            >
-              <RadialBar
-                background
-                dataKey="completion"
-                fill="var(--chart-5)"
-              />
-              <Legend />
-              <ChartTooltip content={<ChartTooltipContent />} />
-            </RadialBarChart>
-          </ChartContainer>
+          <ResponsiveContainer width="100%" height="100%">
+            <ChartContainer config={radialChartConfig} className="w-full h-full">
+              <RadialBarChart 
+                innerRadius="10%" 
+                outerRadius="80%" 
+                data={radialData} 
+                startAngle={180} 
+                endAngle={0}
+              >
+                <RadialBar
+                  background
+                  dataKey="completion"
+                  fill="var(--chart-5)"
+                />
+                <Legend />
+                <ChartTooltip content={<ChartTooltipContent />} />
+              </RadialBarChart>
+            </ChartContainer>
+          </ResponsiveContainer>
         </div>
       </CardContent>
     </Card>

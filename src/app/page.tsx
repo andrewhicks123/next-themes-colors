@@ -21,14 +21,14 @@ export default function Home() {
 }
 
 function HomeContent() {
-  const [tab, setTab] = useQueryState("tab", { defaultValue: "chart" })
+  const [tab, setTab] = useQueryState("tab", { defaultValue: "components" })
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4" suppressHydrationWarning>
       <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-sm">
-        <div className="container flex h-16 items-center justify-between">
-          <h1 className="text-2xl font-bold px-4">Theme/Color Switcher Demo</h1>
-          <div className="flex items-center gap-4">
+        <div className="container flex flex-col md:flex-row h-auto md:h-16 items-center justify-between p-2 md:p-0">
+          <h1 className="text-xl md:text-2xl font-bold px-2 md:px-4">Theme/Color Switcher Demo</h1>
+          <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-0">
             <CurrentTheme />
             <ThemeSwitcher />
             <Link
@@ -38,15 +38,15 @@ function HomeContent() {
             >
               <Button
                 variant="outline"
-                className="h-10 flex items-center justify-center"
+                className="h-8 md:h-10 flex items-center justify-center"
               >
-                <GithubIcon className="h-5 w-5" />
+                <GithubIcon className="h-4 w-4 md:h-5 md:w-5" />
               </Button>
             </Link>
           </div>
         </div>
       </header>
-      <div className="grid gap-8 mt-16">
+      <div className="grid gap-8 mt-20 md:mt-16">
         <Tabs value={tab} onValueChange={setTab} className="w-full">
           <TabsList>
             <TabsTrigger value="chart">Charts</TabsTrigger>
@@ -61,7 +61,7 @@ function HomeContent() {
             </div>
           </TabsContent>
           <TabsContent value="form">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <ExampleForm />
               <LoginForm />
             </div>

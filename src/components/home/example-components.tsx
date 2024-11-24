@@ -15,12 +15,12 @@ export function ExampleComponents() {
   };
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 p-2">
       <Card>
         <CardHeader>
           <CardTitle>Button Variants</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-4">
+        <CardContent className="flex flex-wrap gap-2 justify-center">
           <Button variant="default" onClick={() => handleButtonClick('Default')}>Default</Button>
           <Button variant="secondary" onClick={() => handleButtonClick('Secondary')}>Secondary</Button>
           <Button variant="outline" onClick={() => handleButtonClick('Outline')}>Outline</Button>
@@ -32,7 +32,7 @@ export function ExampleComponents() {
         <CardHeader>
           <CardTitle>Badges</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-4">
+        <CardContent className="flex flex-wrap gap-2 justify-center">
           <Badge>Default</Badge>
           <Badge variant="secondary">Secondary</Badge>
           <Badge variant="outline">Outline</Badge>
@@ -43,7 +43,7 @@ export function ExampleComponents() {
         <CardHeader>
           <CardTitle>Avatar</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-4">
+        <CardContent className="flex flex-wrap gap-2 justify-center">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
             <AvatarFallback>CN</AvatarFallback>
@@ -58,7 +58,7 @@ export function ExampleComponents() {
         <CardHeader>
           <CardTitle>Progress</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-2">
           <Progress value={33} />
           <Progress value={66} />
           <Progress value={100} />

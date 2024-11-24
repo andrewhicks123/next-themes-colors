@@ -17,7 +17,7 @@ import {
 
 export function ExampleForm() {
   return (
-    <Card>
+    <Card className="max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Create project</CardTitle>
         <CardDescription>Deploy your new project in one-click.</CardDescription>
@@ -69,9 +69,9 @@ export function ExampleForm() {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button>Deploy</Button>
+      <CardFooter className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0">
+        <Button variant="outline" className="w-full sm:w-auto">Cancel</Button>
+        <Button className="w-full sm:w-auto">Deploy</Button>
       </CardFooter>
     </Card>
   )
@@ -79,7 +79,7 @@ export function ExampleForm() {
 
 export function LoginForm() {
   return (
-    <Card>
+    <Card className="max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Enter your credentials to access your account.</CardDescription>
@@ -102,9 +102,9 @@ export function LoginForm() {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline">Forgot Password?</Button>
-        <Button>Login</Button>
+      <CardFooter className="flex flex-col sm:flex-row justify-between space-y-2 sm:space-y-0">
+        <Button variant="outline" className="w-full sm:w-auto">Forgot Password?</Button>
+        <Button className="w-full sm:w-auto">Login</Button>
       </CardFooter>
     </Card>
   )
