@@ -14,12 +14,12 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 
 const colorThemes = [
-  { name: "Default", value: "", bgClass: "bg-zinc-900" },
-  { name: "Red", value: "red", bgClass: "bg-red-500" },
-  { name: "Blue", value: "blue", bgClass: "bg-blue-500" },
-  { name: "Green", value: "green", bgClass: "bg-green-500" },
-  { name: "Pink", value: "pink", bgClass: "bg-pink-500" },
-  { name: "Purple", value: "purple", bgClass: "bg-purple-500" },
+  { name: "Default", value: "", bgClass: "bg-zinc-900", lightBgClass: "bg-zinc-100" },
+  { name: "Red", value: "red", bgClass: "bg-red-600", lightBgClass: "bg-red-500" },
+  { name: "Blue", value: "blue", bgClass: "bg-blue-600", lightBgClass: "bg-blue-500" },
+  { name: "Green", value: "green", bgClass: "bg-green-600", lightBgClass: "bg-green-500" },
+  { name: "Pink", value: "pink", bgClass: "bg-pink-600", lightBgClass: "bg-pink-500" },
+  { name: "Purple", value: "purple", bgClass: "bg-purple-600", lightBgClass: "bg-purple-500" },
 ]
 
 export function ThemeSwitcher() {
@@ -32,8 +32,14 @@ export function ThemeSwitcher() {
     return <div suppressHydrationWarning />
   }
 
+  // Determine if we're in dark mode
   const isDarkMode = theme === 'dark' || theme?.endsWith('-dark') || (theme === 'system' && systemTheme === 'dark')
-  const currentTheme = theme?.includes('-') ? theme.split('-')[0] : theme === 'dark' ? '' : theme || ''
+  
+  // Extract the base color theme (without -dark suffix)
+  let currentColorTheme = ''
+  if (theme && theme !== 'light' && theme !== 'dark' && theme !== 'system') {
+    currentColorTheme = theme.replace('-dark', '')
+  }
 
   const handleThemeChange = (color: string) => {
     if (!color) {
@@ -44,13 +50,20 @@ export function ThemeSwitcher() {
   }
 
   const handleModeChange = (checked: boolean) => {
-    const newMode = checked ? 'dark' : ''
-    if (currentTheme === '') {
-      setTheme('dark')
-    } else if (currentTheme) {
-      setTheme(`${currentTheme}${newMode ? '-dark' : ''}`)
+    if (checked) {
+      // Switching to dark mode
+      if (currentColorTheme) {
+        setTheme(`${currentColorTheme}-dark`)
+      } else {
+        setTheme('dark')
+      }
     } else {
-      setTheme(newMode)
+      // Switching to light mode
+      if (currentColorTheme) {
+        setTheme(currentColorTheme)
+      } else {
+        setTheme('light')
+      }
     }
   }
 
@@ -63,19 +76,19 @@ export function ThemeSwitcher() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[280px]">
-        <div className="p-4 space-y-4">
+      <DropdownMenuContent align="end" className="w-[240px]">
+        <div className="p-3 space-y-3">
           <div className="space-y-2">
             <div className="flex justify-between items-center">
               <h3 className="font-semibold">Color Theme</h3>
               <Button 
                 variant="ghost" 
                 size="sm"
-                className="h-8 px-2"
+                className="h-7 px-2 text-xs"
                 onClick={() => setTheme('system')}
               >
-                <RotateCcw className="h-4 w-4 mr-1" />
-                
+                <RotateCcw className="h-3 w-3 mr-1" />
+                Reset
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-2">
@@ -83,11 +96,11 @@ export function ThemeSwitcher() {
                 <Button
                   key={t.value}
                   variant="outline"
-                  className={`w-full h-10 p-0 ${currentTheme === t.value ? 'border-2 border-primary' : ''}`}
+                  className={`w-full h-10 p-0 overflow-hidden ${currentColorTheme === t.value ? 'ring-2 ring-primary ring-offset-2' : ''}`}
                   onClick={() => handleThemeChange(t.value)}
                 >
                   <span className="sr-only">{t.name}</span>
-                  <span className={`w-full h-full ${t.bgClass}`} />
+                  <span className={`w-full h-full ${isDarkMode ? t.bgClass : t.lightBgClass}`} />
                 </Button>
               ))}
             </div>

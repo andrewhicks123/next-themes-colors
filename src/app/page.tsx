@@ -25,7 +25,7 @@ function HomeContent() {
 
   return (
     <div className="container mx-auto p-4" suppressHydrationWarning>
-      <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-xs">
         <div className="container flex flex-col md:flex-row h-auto md:h-16 items-center justify-between p-2 md:p-0">
           <h1 className="text-xl md:text-2xl font-bold px-2 md:px-4">Theme/Color Switcher Demo</h1>
           <div className="flex items-center gap-2 md:gap-4 mt-2 md:mt-0">
