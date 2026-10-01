@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { type ReactNode } from "react"
 import { Toaster } from "sonner"
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <Toaster position="bottom-right" richColors closeButton />
           </ThemeProvider>
         </NuqsAdapter>
+        <Analytics />
       </body>
     </html>
   )
