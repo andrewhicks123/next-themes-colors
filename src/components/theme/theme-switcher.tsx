@@ -1,127 +1,86 @@
 "use client"
 
 import * as React from "react"
-import { Moon, Sun, RotateCcw } from 'lucide-react'
-import { useTheme } from "next-themes"
-
+import { PaletteIcon, RotateCcwIcon } from "lucide-react"
+import { useColorTheme } from "./color-theme-provider"
+import { ModeSegmentedControl } from "./mode-toggle"
+import { ThemeSwatch } from "./theme-swatch"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Separator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils"
 
-const colorThemes = [
-  { name: "Default", value: "", bgClass: "bg-zinc-900", lightBgClass: "bg-zinc-100" },
-  { name: "Red", value: "red", bgClass: "bg-red-600", lightBgClass: "bg-red-500" },
-  { name: "Blue", value: "blue", bgClass: "bg-blue-600", lightBgClass: "bg-blue-500" },
-  { name: "Green", value: "green", bgClass: "bg-green-600", lightBgClass: "bg-green-500" },
-  { name: "Pink", value: "pink", bgClass: "bg-pink-600", lightBgClass: "bg-pink-500" },
-  { name: "Purple", value: "purple", bgClass: "bg-purple-600", lightBgClass: "bg-purple-500" },
-]
-
-export function ThemeSwitcher() {
-  const { theme, setTheme, systemTheme } = useTheme()
-
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => setMounted(true), [])
-
-  if (!mounted) {
-    return <div suppressHydrationWarning />
-  }
-
-  // Determine if we're in dark mode
-  const isDarkMode = theme === 'dark' || theme?.endsWith('-dark') || (theme === 'system' && systemTheme === 'dark')
-  
-  // Extract the base color theme (without -dark suffix)
-  let currentColorTheme = ''
-  if (theme && theme !== 'light' && theme !== 'dark' && theme !== 'system') {
-    currentColorTheme = theme.replace('-dark', '')
-  }
-
-  const handleThemeChange = (color: string) => {
-    if (!color) {
-      setTheme(isDarkMode ? 'dark' : 'light')
-    } else {
-      setTheme(`${color}${isDarkMode ? '-dark' : ''}`)
-    }
-  }
-
-  const handleModeChange = (checked: boolean) => {
-    if (checked) {
-      // Switching to dark mode
-      if (currentColorTheme) {
-        setTheme(`${currentColorTheme}-dark`)
-      } else {
-        setTheme('dark')
-      }
-    } else {
-      // Switching to light mode
-      if (currentColorTheme) {
-        setTheme(currentColorTheme)
-      } else {
-        setTheme('light')
-      }
-    }
-  }
+/**
+ * Grid of every registered color theme. Reusable on its own
+ * (the hero section uses it too).
+ */
+export function ColorThemeGrid({
+  size = "md",
+  className,
+}: {
+  size?: "sm" | "md" | "lg"
+  className?: string
+}) {
+  const { themes, colorTheme, setColorTheme } = useColorTheme()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="w-10 h-10">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
+    <div role="radiogroup" aria-label="Color theme" className={cn("flex flex-wrap gap-2", className)}>
+      {themes.map((t) => (
+        <ThemeSwatch
+          key={t.id}
+          themeId={t.id}
+          label={t.label}
+          size={size}
+          selected={t.id === colorTheme}
+          onSelect={setColorTheme}
+        />
+      ))}
+    </div>
+  )
+}
+
+/**
+ * The theme switcher: a popover with an appearance control (light / dark /
+ * system) and the color theme grid. Drop it anywhere inside <ThemeProvider>.
+ */
+export function ThemeSwitcher({ className }: { className?: string }) {
+  const { theme, colorTheme, resetColorTheme } = useColorTheme()
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" aria-label="Open theme settings" className={cn("gap-2", className)}>
+          <span aria-hidden className="size-3.5 rounded-full bg-primary ring-1 ring-foreground/10 ring-inset" />
+          <span className="hidden sm:inline">{theme.label}</span>
+          <PaletteIcon className="size-4 text-muted-foreground" />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[240px]">
-        <div className="p-3 space-y-3">
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <h3 className="font-semibold">Color Theme</h3>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="h-7 px-2 text-xs"
-                onClick={() => setTheme('system')}
-              >
-                <RotateCcw className="h-3 w-3 mr-1" />
-                Reset
-              </Button>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              {colorThemes.map((t) => (
-                <Button
-                  key={t.value}
-                  variant="outline"
-                  className={`w-full h-10 p-0 overflow-hidden ${currentColorTheme === t.value ? 'ring-2 ring-primary ring-offset-2' : ''}`}
-                  onClick={() => handleThemeChange(t.value)}
-                >
-                  <span className="sr-only">{t.name}</span>
-                  <span className={`w-full h-full ${isDarkMode ? t.bgClass : t.lightBgClass}`} />
-                </Button>
-              ))}
-            </div>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-72 p-0">
+        <section className="space-y-2 p-4">
+          <h3 className="text-sm font-semibold">Appearance</h3>
+          <ModeSegmentedControl />
+        </section>
+        <Separator />
+        <section className="space-y-3 p-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold">Color</h3>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 gap-1 px-2 text-xs text-muted-foreground"
+              onClick={resetColorTheme}
+              disabled={colorTheme === "default"}
+            >
+              <RotateCcwIcon className="size-3" />
+              Reset
+            </Button>
           </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="dark-mode"
-              checked={isDarkMode}
-              onCheckedChange={handleModeChange}
-            />
-            <Label htmlFor="dark-mode">Dark Mode</Label>
-          </div>
-          {/* <div className="border rounded-md p-4 bg-background">
-            <h4 className="text-sm font-semibold mb-2">Preview</h4>
-            <div className={`w-full h-10 rounded ${colorThemes.find(t => t.value === currentTheme)?.bgClass}`} />
-            <div className="mt-2 text-xs text-muted-foreground">
-              {isDarkMode ? 'Dark' : 'Light'} {currentTheme.charAt(0).toUpperCase() + currentTheme.slice(1)} Theme
-            </div>
-          </div> */}
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <ColorThemeGrid size="lg" className="grid grid-cols-6 place-items-center gap-y-3" />
+          <p className="text-xs text-muted-foreground">
+            <span className="font-medium text-foreground">{theme.label}</span> · {theme.description}
+          </p>
+        </section>
+      </PopoverContent>
+    </Popover>
   )
 }
