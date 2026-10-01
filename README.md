@@ -26,6 +26,7 @@ A color theme is a single line of CSS that sets a hue and a chroma. Shared rules
 - Light, dark and system mode via next-themes
 - 12 color themes: default, red, orange, amber, lime, green, teal, sky, blue, violet, fuchsia, pink
 - Each theme is defined by a hue and chroma in oklch; everything else is derived
+- Installable with one `npx shadcn@latest add` command
 - `ThemeSwitcher` popover with a Light / Dark / System control and a swatch grid
 - `useColorTheme()` hook for reading and setting the color anywhere in the tree
 - Cross-tab sync through the `storage` event
@@ -66,10 +67,31 @@ Open http://localhost:3000.
 | `npm run start` | serve the production build |
 | `npm run lint` | ESLint (flat config, `eslint.config.mjs`) |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm run registry:build` | rebuild `public/r/` from `registry.json` |
 
 ## Add it to your own app
 
-### 1. Add the tokens to `globals.css`
+### Install with the shadcn CLI
+
+This repo publishes a [shadcn registry](https://ui.shadcn.com/docs/registry) item. In any project that has run `npx shadcn@latest init`:
+
+```bash
+npx shadcn@latest add https://next-themes-colors.vercel.app/r/theme-switcher.json
+```
+
+That one command:
+
+- copies `components/theme/*`, `hooks/use-mounted.ts` and `lib/themes.ts` into your project, rewriting import aliases to match your `components.json`
+- appends the color theme rules to your `globals.css`
+- installs `next-themes`, `@radix-ui/react-popover` and `lucide-react`, and adds the shadcn `button` if you do not have it
+
+It works with both the Radix and Base UI shadcn styles. Then wrap your layout in `ThemeProvider` and drop in `ThemeSwitcher` (steps 4 and 5 below).
+
+The registry source is [`registry.json`](registry.json); `npm run registry:build` regenerates `public/r/` after editing the theme files.
+
+### Or set it up by hand
+
+#### 1. Add the tokens to `globals.css`
 
 Copy the base palette and the color theme block from [`src/app/globals.css`](src/app/globals.css). A theme is one line:
 
@@ -88,7 +110,7 @@ The shared rules under `[data-theme]:not([data-theme="default"])` derive everyth
 | `--theme-l-dark` | `0.72` | primary lightness in dark mode |
 | `--theme-on-primary` | near white | text color on primary; set a dark value for light hues like amber or lime |
 
-### 2. Register the theme in `src/lib/themes.ts`
+#### 2. Register the theme in `src/lib/themes.ts`
 
 ```ts
 export const colorThemes = [
@@ -100,13 +122,13 @@ export const colorThemes = [
 
 The provider, the switcher and the flash-prevention script all read from this array, so the `id` must match the `data-theme` value in CSS. The `ColorThemeId` type is derived from it, so a typo in `setColorTheme("bleu")` is a compile error.
 
-### 3. Copy the components
+#### 3. Copy the components
 
 - `src/components/theme/` – provider, hook, switcher, swatch and mode toggle
 - `src/hooks/use-mounted.ts`
 - `src/components/ui/button.tsx`, `popover.tsx`, `separator.tsx` (shadcn/ui, used by the switcher)
 
-### 4. Wrap your layout
+#### 4. Wrap your layout
 
 ```tsx
 import { ThemeProvider } from "@/components/theme"
@@ -130,7 +152,7 @@ export default function RootLayout({ children }) {
 <ThemeProvider defaultTheme="dark" color={{ defaultTheme: "blue", storageKey: "my-app-color" }}>
 ```
 
-### 5. Use it
+#### 5. Use it
 
 ```tsx
 import {
@@ -195,6 +217,8 @@ src/
     site/                header, hero, install guide, footer
   hooks/use-mounted.ts
   lib/themes.ts          color theme registry
+registry.json            shadcn registry definition (source for the install command)
+public/r/                built registry items served at /r/*.json
 docs/screenshots/        images used in this README
 ```
 

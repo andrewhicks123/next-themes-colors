@@ -1,5 +1,8 @@
 import { CodeBlock } from "@/components/site/code-block"
 
+export const REGISTRY_URL = "https://next-themes-colors.vercel.app/r/theme-switcher.json"
+export const INSTALL_COMMAND = `npx shadcn@latest add ${REGISTRY_URL}`
+
 const steps = [
   {
     title: "Add the theme tokens",
@@ -49,8 +52,21 @@ export function InstallGuide() {
       <div className="container py-12 md:py-16">
         <div className="mb-10 space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">Add it to your app</h2>
-          <p className="text-muted-foreground">Three steps. Copy the files from this repo and you are done.</p>
+          <p className="text-muted-foreground">One command with the shadcn CLI, or copy the files by hand.</p>
         </div>
+
+        <div className="mb-12 grid gap-4 lg:grid-cols-[1fr_minmax(0,2fr)]">
+          <div className="space-y-2">
+            <h3 className="font-semibold">Install with the shadcn CLI</h3>
+            <p className="text-sm text-muted-foreground">
+              Installs the provider, hook, switcher, swatches and mode toggle, adds the theme CSS to your
+              globals.css and pulls in next-themes and the button component. Works with any shadcn/ui style.
+            </p>
+          </div>
+          <CodeBlock code={INSTALL_COMMAND} language="bash" />
+        </div>
+
+        <h3 className="mb-6 font-semibold">Or set it up by hand</h3>
         <ol className="grid gap-8 lg:grid-cols-3">
           {steps.map((step, i) => (
             <li key={step.title} className="flex min-w-0 flex-col gap-3">

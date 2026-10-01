@@ -1,0 +1,179 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "next-themes-colors",
+  "homepage": "https://next-themes-colors.vercel.app",
+  "items": [
+    {
+      "name": "theme-switcher",
+      "type": "registry:block",
+      "title": "Theme Switcher",
+      "description": "Light / dark / system mode plus twelve color themes for next-themes and shadcn/ui. Adds the provider, hook, switcher popover, swatches, mode toggle and the hue-based theme CSS.",
+      "author": "andrewhicks123",
+      "dependencies": [
+        "next-themes",
+        "@radix-ui/react-popover",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button"
+      ],
+      "files": [
+        {
+          "path": "src/components/theme/color-theme-provider.tsx",
+          "type": "registry:component",
+          "target": "components/theme/color-theme-provider.tsx"
+        },
+        {
+          "path": "src/components/theme/theme-provider.tsx",
+          "type": "registry:component",
+          "target": "components/theme/theme-provider.tsx"
+        },
+        {
+          "path": "src/components/theme/theme-switcher.tsx",
+          "type": "registry:component",
+          "target": "components/theme/theme-switcher.tsx"
+        },
+        {
+          "path": "src/components/theme/theme-swatch.tsx",
+          "type": "registry:component",
+          "target": "components/theme/theme-swatch.tsx"
+        },
+        {
+          "path": "src/components/theme/mode-toggle.tsx",
+          "type": "registry:component",
+          "target": "components/theme/mode-toggle.tsx"
+        },
+        {
+          "path": "src/components/theme/index.ts",
+          "type": "registry:component",
+          "target": "components/theme/index.ts"
+        },
+        {
+          "path": "src/hooks/use-mounted.ts",
+          "type": "registry:hook",
+          "target": "hooks/use-mounted.ts"
+        },
+        {
+          "path": "src/lib/themes.ts",
+          "type": "registry:lib",
+          "target": "lib/themes.ts"
+        }
+      ],
+      "css": {
+        "[data-theme=\"red\"]": {
+          "--theme-hue": "25",
+          "--theme-chroma": "0.215"
+        },
+        "[data-theme=\"orange\"]": {
+          "--theme-hue": "50",
+          "--theme-chroma": "0.19",
+          "--theme-l": "0.64",
+          "--theme-l-dark": "0.74"
+        },
+        "[data-theme=\"amber\"]": {
+          "--theme-hue": "78",
+          "--theme-chroma": "0.17",
+          "--theme-l": "0.78",
+          "--theme-l-dark": "0.82",
+          "--theme-on-primary": "oklch(0.25 0.06 78)"
+        },
+        "[data-theme=\"lime\"]": {
+          "--theme-hue": "128",
+          "--theme-chroma": "0.2",
+          "--theme-l": "0.78",
+          "--theme-l-dark": "0.84",
+          "--theme-on-primary": "oklch(0.25 0.06 128)"
+        },
+        "[data-theme=\"green\"]": {
+          "--theme-hue": "152",
+          "--theme-chroma": "0.17",
+          "--theme-l": "0.6",
+          "--theme-l-dark": "0.74"
+        },
+        "[data-theme=\"teal\"]": {
+          "--theme-hue": "185",
+          "--theme-chroma": "0.12",
+          "--theme-l": "0.6",
+          "--theme-l-dark": "0.76"
+        },
+        "[data-theme=\"sky\"]": {
+          "--theme-hue": "230",
+          "--theme-chroma": "0.15",
+          "--theme-l": "0.62",
+          "--theme-l-dark": "0.76"
+        },
+        "[data-theme=\"blue\"]": {
+          "--theme-hue": "262",
+          "--theme-chroma": "0.21",
+          "--theme-l": "0.56",
+          "--theme-l-dark": "0.7"
+        },
+        "[data-theme=\"violet\"]": {
+          "--theme-hue": "295",
+          "--theme-chroma": "0.22",
+          "--theme-l": "0.56",
+          "--theme-l-dark": "0.72"
+        },
+        "[data-theme=\"fuchsia\"]": {
+          "--theme-hue": "325",
+          "--theme-chroma": "0.24",
+          "--theme-l": "0.6",
+          "--theme-l-dark": "0.74"
+        },
+        "[data-theme=\"pink\"]": {
+          "--theme-hue": "352",
+          "--theme-chroma": "0.21",
+          "--theme-l": "0.62",
+          "--theme-l-dark": "0.76"
+        },
+        "[data-theme=\"default\"]": {
+          "--primary": "oklch(0.205 0 0)",
+          "--primary-foreground": "oklch(0.985 0 0)"
+        },
+        ".dark [data-theme=\"default\"], .dark[data-theme=\"default\"]": {
+          "--primary": "oklch(0.922 0 0)",
+          "--primary-foreground": "oklch(0.205 0 0)"
+        },
+        "[data-theme]:not([data-theme=\"default\"])": {
+          "--theme-l": "0.58",
+          "--theme-l-dark": "0.72",
+          "--theme-on-primary": "oklch(0.985 0.01 var(--theme-hue))",
+          "--primary": "oklch(var(--theme-l) var(--theme-chroma) var(--theme-hue))",
+          "--primary-foreground": "var(--theme-on-primary)",
+          "--ring": "oklch(var(--theme-l) calc(var(--theme-chroma) * 0.85) var(--theme-hue))",
+          "--secondary": "oklch(0.965 0.018 var(--theme-hue))",
+          "--secondary-foreground": "oklch(0.3 0.07 var(--theme-hue))",
+          "--accent": "oklch(0.955 0.025 var(--theme-hue))",
+          "--accent-foreground": "oklch(0.3 0.07 var(--theme-hue))",
+          "--chart-1": "oklch(var(--theme-l) var(--theme-chroma) var(--theme-hue))",
+          "--chart-2": "oklch(calc(var(--theme-l) + 0.14) calc(var(--theme-chroma) * 0.7) calc(var(--theme-hue) + 30))",
+          "--chart-3": "oklch(calc(var(--theme-l) - 0.14) calc(var(--theme-chroma) * 0.8) calc(var(--theme-hue) - 20))",
+          "--chart-4": "oklch(calc(var(--theme-l) + 0.24) calc(var(--theme-chroma) * 0.5) calc(var(--theme-hue) + 60))",
+          "--chart-5": "oklch(calc(var(--theme-l) - 0.04) calc(var(--theme-chroma) * 0.6) calc(var(--theme-hue) - 55))"
+        },
+        ".dark [data-theme]:not([data-theme=\"default\"]), .dark[data-theme]:not([data-theme=\"default\"])": {
+          "--primary": "oklch(var(--theme-l-dark) calc(var(--theme-chroma) * 0.9) var(--theme-hue))",
+          "--primary-foreground": "oklch(0.17 0.04 var(--theme-hue))",
+          "--ring": "oklch(var(--theme-l-dark) calc(var(--theme-chroma) * 0.7) var(--theme-hue))",
+          "--secondary": "oklch(0.28 0.03 var(--theme-hue))",
+          "--secondary-foreground": "oklch(0.96 0.02 var(--theme-hue))",
+          "--accent": "oklch(0.3 0.04 var(--theme-hue))",
+          "--accent-foreground": "oklch(0.96 0.02 var(--theme-hue))",
+          "--chart-1": "oklch(var(--theme-l-dark) calc(var(--theme-chroma) * 0.9) var(--theme-hue))",
+          "--chart-2": "oklch(calc(var(--theme-l-dark) + 0.1) calc(var(--theme-chroma) * 0.6) calc(var(--theme-hue) + 30))",
+          "--chart-3": "oklch(calc(var(--theme-l-dark) - 0.1) calc(var(--theme-chroma) * 0.8) calc(var(--theme-hue) - 20))",
+          "--chart-4": "oklch(calc(var(--theme-l-dark) + 0.16) calc(var(--theme-chroma) * 0.4) calc(var(--theme-hue) + 60))",
+          "--chart-5": "oklch(calc(var(--theme-l-dark) - 0.04) calc(var(--theme-chroma) * 0.6) calc(var(--theme-hue) - 55))"
+        },
+        ".dark [data-theme=\"amber\"], .dark[data-theme=\"amber\"], .dark [data-theme=\"lime\"], .dark[data-theme=\"lime\"]": {
+          "--primary-foreground": "var(--theme-on-primary)"
+        }
+      },
+      "docs": "Wrap your root layout: <html lang=\"en\" suppressHydrationWarning><body><ThemeProvider>{children}</ThemeProvider></body></html>, then drop <ThemeSwitcher /> anywhere inside it. Import both from \"@/components/theme\".",
+      "categories": [
+        "theme",
+        "dark-mode"
+      ]
+    }
+  ]
+}
