@@ -5,6 +5,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover"
 import { PaletteIcon, RotateCcwIcon } from "lucide-react"
 import { useColorTheme } from "./color-theme-provider"
 import { ModeSegmentedControl } from "./mode-toggle"
+import { ThemeCustomizer } from "./theme-customizer"
 import { ThemeSwatch } from "./theme-swatch"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -66,7 +67,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
           align="end"
           sideOffset={6}
           className={cn(
-            "z-50 w-72 rounded-md border bg-popover p-0 text-popover-foreground shadow-md outline-hidden",
+            "z-50 w-80 max-h-[calc(100dvh-5rem)] overflow-y-auto rounded-md border bg-popover p-0 text-popover-foreground shadow-md outline-hidden",
             "origin-(--radix-popover-content-transform-origin)",
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"
           )}
@@ -90,10 +91,15 @@ export function ThemeSwitcher({ className }: { className?: string }) {
                 Reset
               </Button>
             </div>
-            <ColorThemeGrid size="lg" className="grid grid-cols-6 place-items-center gap-y-3" />
+            <ColorThemeGrid size="md" className="grid grid-cols-7 place-items-center gap-y-3" />
             <p className="text-xs text-muted-foreground">
               <span className="font-medium text-foreground">{theme.label}</span> · {theme.description}
             </p>
+          </section>
+          <div role="separator" className="h-px w-full bg-border" />
+          <section className="space-y-2 p-4">
+            <h3 className="text-sm font-semibold">Customize</h3>
+            <ThemeCustomizer />
           </section>
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>

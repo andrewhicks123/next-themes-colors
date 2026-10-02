@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "registry:build": "shadcn build"
+    "registry:build": "node scripts/build-registry.mjs"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.11",

@@ -118,10 +118,27 @@
 /*    --theme-l-dark       primary lightness in dark mode  (0.72)      */
 /*    --theme-on-primary   text color on primary (near white)          */
 /*                                                                     */
+/*  The "custom" theme reads its hue and chroma from --custom-hue and  */
+/*  --custom-chroma, which the provider sets as inline styles on       */
+/*  <html> so visitors can dial in any color.                          */
+/*                                                                     */
 /*  Because these are plain CSS variables, the same rules also work    */
 /*  on any element, e.g. `<span data-theme="red" class="bg-primary">`  */
 /*  renders a swatch in that theme's color.                            */
+/*                                                                     */
+/*  Everything between the @registry markers is published as the       */
+/*  shadcn registry item by scripts/build-registry.mjs.                */
 /* ------------------------------------------------------------------ */
+
+/* @registry:start */
+
+/* Knob defaults. Kept at single-attribute specificity so the per-theme
+   rules below can override them. */
+[data-theme] {
+  --theme-l: 0.58;
+  --theme-l-dark: 0.72;
+  --theme-on-primary: oklch(0.985 0.01 var(--theme-hue));
+}
 
 [data-theme="red"]     { --theme-hue: 25;  --theme-chroma: 0.215; }
 [data-theme="orange"]  { --theme-hue: 50;  --theme-chroma: 0.19;  --theme-l: 0.64; --theme-l-dark: 0.74; }
@@ -134,6 +151,7 @@
 [data-theme="violet"]  { --theme-hue: 295; --theme-chroma: 0.22;  --theme-l: 0.56; --theme-l-dark: 0.72; }
 [data-theme="fuchsia"] { --theme-hue: 325; --theme-chroma: 0.24;  --theme-l: 0.6;  --theme-l-dark: 0.74; }
 [data-theme="pink"]    { --theme-hue: 352; --theme-chroma: 0.21;  --theme-l: 0.62; --theme-l-dark: 0.76; }
+[data-theme="custom"]  { --theme-hue: var(--custom-hue, 262); --theme-chroma: var(--custom-chroma, 0.2); --theme-l: 0.6; --theme-l-dark: 0.74; }
 
 /* The default theme keeps the neutral base palette, but must restate
    primary so that a default swatch inside a colored page stays neutral. */
@@ -148,10 +166,6 @@
 }
 
 [data-theme]:not([data-theme="default"]) {
-  --theme-l: 0.58;
-  --theme-l-dark: 0.72;
-  --theme-on-primary: oklch(0.985 0.01 var(--theme-hue));
-
   --primary: oklch(var(--theme-l) var(--theme-chroma) var(--theme-hue));
   --primary-foreground: var(--theme-on-primary);
   --ring: oklch(var(--theme-l) calc(var(--theme-chroma) * 0.85) var(--theme-hue));
@@ -189,6 +203,18 @@
 .dark [data-theme="lime"],  .dark[data-theme="lime"] {
   --primary-foreground: var(--theme-on-primary);
 }
+
+/* The provider sets data-theme-transition on <html> for a moment when the
+   color changes (never for light / dark, and never when the visitor prefers
+   reduced motion) so colors cross-fade instead of snapping. */
+[data-theme-transition],
+[data-theme-transition] * {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 350ms;
+  transition-timing-function: ease-out;
+}
+
+/* @registry:end */
 
 /* ------------------------------------------------------------------ */
 /*  Base styles                                                        */

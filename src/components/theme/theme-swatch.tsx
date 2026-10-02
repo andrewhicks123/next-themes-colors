@@ -24,9 +24,12 @@ const sizes = {
  *
  * It sets `data-theme` on itself, so the CSS rules in globals.css resolve
  * `--primary` for that theme on this element, in the current light/dark
- * mode, with no hard-coded hex values anywhere.
+ * mode, with no hard-coded hex values anywhere. The custom theme shows a
+ * hue wheel ring around its current color instead.
  */
 export function ThemeSwatch({ themeId, label, selected = false, size = "md", onSelect, className, ...props }: ThemeSwatchProps) {
+  const isCustom = themeId === "custom"
+
   return (
     <button
       type="button"
@@ -39,17 +42,19 @@ export function ThemeSwatch({ themeId, label, selected = false, size = "md", onS
       onClick={() => onSelect?.(themeId)}
       className={cn(
         "group relative inline-flex shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground",
-        "ring-offset-background transition-transform duration-150 ease-out",
+        "ring-offset-background transition-transform duration-150 ease-out motion-reduce:transition-none",
         "hover:scale-110 focus-visible:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         "data-selected:ring-2 data-selected:ring-primary data-selected:ring-offset-2",
+        isCustom && "bg-[conic-gradient(in_oklch_longer_hue,oklch(0.7_0.18_0),oklch(0.7_0.18_360))]",
         sizes[size],
         className
       )}
       {...props}
     >
+      {isCustom && <span aria-hidden className="absolute inset-[3px] rounded-full bg-primary" />}
       <CheckIcon
         aria-hidden
-        className={cn("size-1/2 transition-opacity", selected ? "opacity-100" : "opacity-0 group-hover:opacity-40")}
+        className={cn("relative size-1/2 transition-opacity", selected ? "opacity-100" : "opacity-0 group-hover:opacity-40")}
         strokeWidth={3}
       />
     </button>
