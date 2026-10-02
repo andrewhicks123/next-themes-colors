@@ -1,6 +1,6 @@
 # next-themes-colors
 
-Light, dark and twelve color themes for Next.js. One reusable theme component built on [next-themes](https://github.com/pacocoursey/next-themes), [shadcn/ui](https://ui.shadcn.com) and [Tailwind CSS v4](https://tailwindcss.com), with zero flash on reload.
+Light, dark, twelve color themes and a custom hue picker for Next.js. One reusable theme component built on [next-themes](https://github.com/pacocoursey/next-themes), [shadcn/ui](https://ui.shadcn.com) and [Tailwind CSS v4](https://tailwindcss.com), with zero flash on reload.
 
 **Live demo:** [next-themes-colors.vercel.app](https://next-themes-colors.vercel.app)
 
@@ -25,9 +25,13 @@ A color theme is a single line of CSS that sets a hue and a chroma. Shared rules
 
 - Light, dark and system mode via next-themes
 - 12 color themes: default, red, orange, amber, lime, green, teal, sky, blue, violet, fuchsia, pink
+- A custom theme with hue and chroma sliders, so visitors can dial in any color
+- A border radius picker (none to full) applied through `--radius`
+- Copy CSS button that outputs the one-line rule needed to reproduce the current theme and radius
+- Smooth cross-fade when the color changes, skipped when the visitor prefers reduced motion
 - Each theme is defined by a hue and chroma in oklch; everything else is derived
 - Installable with one `npx shadcn@latest add` command
-- `ThemeSwitcher` popover with a Light / Dark / System control and a swatch grid
+- `ThemeSwitcher` popover with a Light / Dark / System control, a swatch grid and the customizer
 - `useColorTheme()` hook for reading and setting the color anywhere in the tree
 - Cross-tab sync through the `storage` event
 - No flash of the wrong theme on first paint
@@ -36,9 +40,9 @@ A color theme is a single line of CSS that sets a hue and a chroma. Shared rules
 
 ## The demo
 
-<img src="docs/screenshots/switcher.png" alt="The theme switcher popover" width="520" />
+<img src="docs/screenshots/switcher.png" alt="The theme switcher popover with appearance, color swatches and the customizer" width="520" />
 
-The header holds the `ThemeSwitcher` popover, a sun / moon `ModeToggle`, a readout of the active mode and color, and a link to this repo. The hero shows every swatch inline. Below that, four tabs (synced to the `?tab=` query parameter) exercise the tokens:
+The header holds the `ThemeSwitcher` popover, a sun / moon `ModeToggle`, a readout of the active mode and color, and a link to this repo. The popover has three sections: appearance, the color swatches, and a customizer with hue and chroma sliders for the custom theme, a radius picker and a copy-CSS button. The hero shows every swatch inline. Below that, four tabs (synced to the `?tab=` query parameter) exercise the tokens:
 
 | Tab | What it shows |
 | --- | --- |
@@ -83,11 +87,11 @@ That one command:
 
 - copies `components/theme/*`, `hooks/use-mounted.ts` and `lib/themes.ts` into your project, rewriting import aliases to match your `components.json`
 - appends the color theme rules to your `globals.css`
-- installs `next-themes`, `@radix-ui/react-popover` and `lucide-react`, and adds the shadcn `button` if you do not have it
+- installs `next-themes`, `@radix-ui/react-popover`, `@radix-ui/react-slider` and `lucide-react`, and adds the shadcn `button` if you do not have it
 
 It works with both the Radix and Base UI shadcn styles. Then wrap your layout in `ThemeProvider` and drop in `ThemeSwitcher` (steps 4 and 5 below).
 
-The registry source is [`registry.json`](registry.json); `npm run registry:build` regenerates `public/r/` after editing the theme files.
+The registry is generated: `npm run registry:build` runs [`scripts/build-registry.mjs`](scripts/build-registry.mjs), which extracts the CSS between the `@registry` markers in `globals.css`, checks the theme ids against `lib/themes.ts`, writes `registry.json` and builds `public/r/`.
 
 ### Or set it up by hand
 
@@ -109,6 +113,8 @@ The shared rules under `[data-theme]:not([data-theme="default"])` derive everyth
 | `--theme-l` | `0.58` | primary lightness in light mode |
 | `--theme-l-dark` | `0.72` | primary lightness in dark mode |
 | `--theme-on-primary` | near white | text color on primary; set a dark value for light hues like amber or lime |
+
+The `custom` theme reads `--custom-hue` and `--custom-chroma` instead, which the provider sets as inline styles on `<html>`.
 
 #### 2. Register the theme in `src/lib/themes.ts`
 
@@ -156,11 +162,12 @@ export default function RootLayout({ children }) {
 
 ```tsx
 import {
-  ThemeSwitcher,       // the full popover
-  ColorThemeGrid,      // just the swatches
-  ThemeSwatch,         // a single swatch
-  ModeToggle,          // sun / moon button
-  ModeSegmentedControl // Light / Dark / System
+  ThemeSwitcher,        // the full popover
+  ColorThemeGrid,       // just the swatches
+  ThemeSwatch,          // a single swatch
+  ThemeCustomizer,      // hue / chroma sliders, radius picker, copy CSS
+  ModeToggle,           // sun / moon button
+  ModeSegmentedControl, // Light / Dark / System
   useColorTheme,
 } from "@/components/theme"
 
@@ -196,7 +203,13 @@ Composes `NextThemesProvider` (attribute `class`, system enabled, transitions di
 | `theme` | `ColorTheme` | Registry entry for the active color |
 | `themes` | `readonly ColorTheme[]` | Every registered color, in display order |
 | `setColorTheme(id)` | `(id: ColorThemeId) => void` | Activate a color; persists and syncs across tabs |
-| `resetColorTheme()` | `() => void` | Back to the default color |
+| `resetColorTheme()` | `() => void` | Back to the default color, radius and custom values |
+| `customTheme` | `{ hue, chroma }` | Values used by the `custom` theme |
+| `setCustomTheme(partial)` | `(v: Partial<CustomTheme>) => void` | Update hue and/or chroma; also activates `custom` |
+| `radius` | `number` | Border radius in rem, one of the presets in `radiusOptions` |
+| `setRadius(rem)` | `(v: Radius) => void` | Apply a radius preset through `--radius` |
+
+Everything is persisted in `localStorage` under the storage key, `<key>-custom` and `<key>-radius`, restored before hydration by the inline script, and synced across tabs.
 
 ### How swatches get their color
 
@@ -211,13 +224,14 @@ src/
     layout.tsx           ThemeProvider, fonts, toaster, Vercel Analytics
     page.tsx             demo page
   components/
-    theme/               the reusable theme layer (copy this folder)
+    theme/               the reusable theme layer (provider, switcher, customizer, swatch, mode toggle)
     ui/                  shadcn/ui primitives
     showcase/            demo tabs: components, charts, forms, palette
     site/                header, hero, install guide, footer
   hooks/use-mounted.ts
   lib/themes.ts          color theme registry
-registry.json            shadcn registry definition (source for the install command)
+scripts/build-registry.mjs generates registry.json from globals.css and themes.ts
+registry.json            generated shadcn registry definition
 public/r/                built registry items served at /r/*.json
 docs/screenshots/        images used in this README
 ```

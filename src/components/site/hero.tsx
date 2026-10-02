@@ -2,12 +2,13 @@
 
 import { ArrowDownIcon, GithubIcon, SparklesIcon } from "lucide-react"
 import { ColorThemeGrid, useColorTheme } from "@/components/theme"
+import { presetColorThemes } from "@/lib/themes"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { GITHUB_URL } from "@/components/site/header"
 
 export function Hero() {
-  const { theme, themes } = useColorTheme()
+  const { theme } = useColorTheme()
 
   return (
     <section className="relative overflow-hidden border-b">
@@ -25,12 +26,12 @@ export function Hero() {
         <div className="max-w-3xl space-y-4">
           <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl md:text-6xl">
             One component.{" "}
-            <span className="text-primary">{themes.length} colors.</span> Zero flash.
+            <span className="text-primary">{presetColorThemes.length} colors.</span> Any hue. Zero flash.
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground text-pretty">
             Light and dark mode from next-themes, plus a color layer that lives in a single
             <code className="mx-1 rounded bg-muted px-1.5 py-0.5 font-mono text-sm">data-theme</code>
-            attribute. Pick a color below and every button, chart and form updates instantly.
+            attribute. Pick a color below, or dial in your own hue, and every button, chart and form updates instantly.
           </p>
         </div>
 

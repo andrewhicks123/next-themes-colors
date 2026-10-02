@@ -7,11 +7,12 @@
       "name": "theme-switcher",
       "type": "registry:block",
       "title": "Theme Switcher",
-      "description": "Light / dark / system mode plus twelve color themes for next-themes and shadcn/ui. Adds the provider, hook, switcher popover, swatches, mode toggle and the hue-based theme CSS.",
+      "description": "Light / dark / system mode plus twelve color themes, a custom hue picker and a radius picker for next-themes and shadcn/ui. Adds the provider, hook, switcher popover, customizer, swatches, mode toggle and the hue-based theme CSS.",
       "author": "andrewhicks123",
       "dependencies": [
         "next-themes",
         "@radix-ui/react-popover",
+        "@radix-ui/react-slider",
         "lucide-react"
       ],
       "registryDependencies": [
@@ -32,6 +33,11 @@
           "path": "src/components/theme/theme-switcher.tsx",
           "type": "registry:component",
           "target": "components/theme/theme-switcher.tsx"
+        },
+        {
+          "path": "src/components/theme/theme-customizer.tsx",
+          "type": "registry:component",
+          "target": "components/theme/theme-customizer.tsx"
         },
         {
           "path": "src/components/theme/theme-swatch.tsx",
@@ -60,6 +66,11 @@
         }
       ],
       "css": {
+        "[data-theme]": {
+          "--theme-l": "0.58",
+          "--theme-l-dark": "0.72",
+          "--theme-on-primary": "oklch(0.985 0.01 var(--theme-hue))"
+        },
         "[data-theme=\"red\"]": {
           "--theme-hue": "25",
           "--theme-chroma": "0.215"
@@ -126,6 +137,12 @@
           "--theme-l": "0.62",
           "--theme-l-dark": "0.76"
         },
+        "[data-theme=\"custom\"]": {
+          "--theme-hue": "var(--custom-hue, 262)",
+          "--theme-chroma": "var(--custom-chroma, 0.2)",
+          "--theme-l": "0.6",
+          "--theme-l-dark": "0.74"
+        },
         "[data-theme=\"default\"]": {
           "--primary": "oklch(0.205 0 0)",
           "--primary-foreground": "oklch(0.985 0 0)"
@@ -135,9 +152,6 @@
           "--primary-foreground": "oklch(0.205 0 0)"
         },
         "[data-theme]:not([data-theme=\"default\"])": {
-          "--theme-l": "0.58",
-          "--theme-l-dark": "0.72",
-          "--theme-on-primary": "oklch(0.985 0.01 var(--theme-hue))",
           "--primary": "oklch(var(--theme-l) var(--theme-chroma) var(--theme-hue))",
           "--primary-foreground": "var(--theme-on-primary)",
           "--ring": "oklch(var(--theme-l) calc(var(--theme-chroma) * 0.85) var(--theme-hue))",
@@ -167,6 +181,11 @@
         },
         ".dark [data-theme=\"amber\"], .dark[data-theme=\"amber\"], .dark [data-theme=\"lime\"], .dark[data-theme=\"lime\"]": {
           "--primary-foreground": "var(--theme-on-primary)"
+        },
+        "[data-theme-transition], [data-theme-transition] *": {
+          "transition-property": "background-color, border-color, color, fill, stroke, box-shadow",
+          "transition-duration": "350ms",
+          "transition-timing-function": "ease-out"
         }
       },
       "docs": "Wrap your root layout: <html lang=\"en\" suppressHydrationWarning><body><ThemeProvider>{children}</ThemeProvider></body></html>, then drop <ThemeSwitcher /> anywhere inside it. Import both from \"@/components/theme\".",
